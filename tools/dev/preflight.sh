@@ -63,6 +63,9 @@ esac
 if [ "$INSTALL_HOOK" = "1" ]; then
   mkdir -p .git/hooks
   for h in pre-push pre-commit post-merge; do
+    # rm first: a pre-existing symlink here would make 'cat >' write THROUGH it
+    # into the target file (e.g. clobbering tools/dev/preflight.sh itself).
+    rm -f ".git/hooks/$h"
     cat > ".git/hooks/$h" <<'HOOK'
 #!/usr/bin/env bash
 # Installed by tools/dev/preflight.sh --install-hook (hybrid).
