@@ -14,7 +14,21 @@
 #   tools/dev/preflight.sh --full        # run the ENTIRE rspec suite (like CI)
 #   tools/dev/preflight.sh --base BRANCH # compare against a different base ref
 #   tools/dev/preflight.sh --no-rspec    # skip rspec (lint/rubocop/tidy only)
-#   tools/dev/preflight.sh --install-hook # install a git pre-push hook
+#   tools/dev/preflight.sh --install-hook # symlink this script into .git/hooks
+#
+# Activation follows the same convention as tools/dev/pre-commit-hook.rb: this
+# script is a tracked repo file, and you symlink it into .git/hooks so it runs
+# against whatever is checked out in your working tree. --install-hook does the
+# symlinks for you, or do it by hand (like the msftidy hook):
+#
+#   ln -sf ../../tools/dev/preflight.sh .git/hooks/pre-push
+#   ln -sf ../../tools/dev/preflight.sh .git/hooks/pre-commit
+#   ln -sf ../../tools/dev/preflight.sh .git/hooks/post-merge
+#
+# When invoked as a git hook the script keys off its name ($0): pre-commit and
+# post-merge run the fast checks (no rspec, matching the lightweight msftidy
+# hook), while pre-push runs the full diff-scoped suite. Bypass a push with
+# 'git push --no-verify'.
 #
 # Exit code is non-zero if any check fails, so it is safe to gate a push on it.
 # Written to run on stock macOS bash 3.2 as well as modern bash.
@@ -38,32 +52,24 @@ for arg in "$@"; do
   esac
 done
 
-# ---- pre-push hook installer -------------------------------------------------
+# When run as a git hook (symlinked into .git/hooks), key off the hook name the
+# same way tools/dev/pre-commit-hook.rb does. Keep commit/merge-time checks fast.
+HOOK_NAME="$(basename "$0" 2>/dev/null)"
+case "$HOOK_NAME" in
+  pre-commit|post-merge) RUN_RSPEC=0 ;;
+esac
+
+# ---- hook installer (rapid7-style symlinks) ---------------------------------
 if [ "$INSTALL_HOOK" = "1" ]; then
-  hook=".git/hooks/pre-push"
-  cat > "$hook" <<'HOOK'
-#!/usr/bin/env bash
-# Installed by tools/dev/preflight.sh --install-hook
-#
-# The preflight script lives ONLY on the fork's master, so feature branches
-# never carry it (keeps their PR diffs clean). This hook loads it from master
-# via 'git show' and runs it against whatever branch you are currently pushing.
-# If master does not have the script (fresh clone), it skips without blocking.
-# Bypass a single push with:  git push --no-verify
-for ref in origin/master master; do
-  if git cat-file -e "$ref:tools/dev/preflight.sh" 2>/dev/null; then
-    echo "[preflight] running local CI checks before push (bypass: git push --no-verify)"
-    git show "$ref:tools/dev/preflight.sh" | bash -s --
-    exit $?
-  fi
-done
-echo "[preflight] tools/dev/preflight.sh not found on origin/master; skipping"
-exit 0
-HOOK
-  chmod +x "$hook"
-  echo "Installed pre-push hook at $hook."
-  echo "It loads preflight from master via 'git show', so it runs on every branch"
-  echo "without the script ever living on a feature branch. Bypass: git push --no-verify"
+  mkdir -p .git/hooks
+  for h in pre-push pre-commit post-merge; do
+    ln -sf ../../tools/dev/preflight.sh ".git/hooks/$h"
+  done
+  chmod +x tools/dev/preflight.sh 2>/dev/null
+  echo "Symlinked tools/dev/preflight.sh into .git/hooks (pre-push, pre-commit, post-merge)."
+  echo "Like the msftidy hook, this runs against your working tree, so it only"
+  echo "fires on branches where tools/dev/preflight.sh is checked out."
+  echo "Bypass a single push/commit with --no-verify."
   exit 0
 fi
 
