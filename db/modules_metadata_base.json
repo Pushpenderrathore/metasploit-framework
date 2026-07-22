@@ -7032,7 +7032,7 @@
     "autofilter_ports": [],
     "autofilter_services": [],
     "targets": null,
-    "mod_time": "2025-05-21 08:32:40 +0000",
+    "mod_time": "2026-07-02 15:29:38 +0000",
     "path": "/modules/auxiliary/admin/kerberos/ticket_converter.rb",
     "is_install_path": true,
     "ref_name": "admin/kerberos/ticket_converter",
@@ -31650,11 +31650,14 @@
     "disclosure_date": null,
     "type": "auxiliary",
     "author": [
-      "todb <todb@metasploit.com>"
+      "todb <todb@metasploit.com>",
+      "g0tmi1k"
     ],
-    "description": "This module will test FTP logins on a range of machines and\n        report successful logins.  If you have loaded a database plugin\n        and connected to a database this module will record successful\n        logins and hosts so you can track your access.",
+    "description": "This module tests FTP logins on a range of machines. Successful\n          logins are recorded in the database as credentials, along with\n          host information.",
     "references": [
-      "CVE-1999-0502"
+      "CVE-1999-0502",
+      "ATT&CK-T1021",
+      "ATT&CK-T1110.001"
     ],
     "platform": "",
     "arch": "",
@@ -31667,14 +31670,24 @@
       "ftp"
     ],
     "targets": null,
-    "mod_time": "2026-04-02 17:30:43 +0000",
+    "mod_time": "2026-05-29 15:07:34 +0000",
     "path": "/modules/auxiliary/scanner/ftp/ftp_login.rb",
     "is_install_path": true,
     "ref_name": "scanner/ftp/ftp_login",
-    "check": false,
+    "check": true,
     "post_auth": true,
     "default_credential": false,
-    "notes": {},
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "artifacts-on-disk",
+        "ioc-in-logs",
+        "account-lockouts"
+      ],
+      "Reliability": []
+    },
     "session_types": false,
     "needs_cleanup": false,
     "actions": []
