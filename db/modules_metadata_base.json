@@ -299830,6 +299830,37 @@
     "payload_type": 1,
     "staged": false
   },
+  "payload_windows/aarch64/shell_reverse_tcp": {
+    "name": "Windows AArch64 Command Shell, Reverse TCP Inline",
+    "fullname": "payload/windows/aarch64/shell_reverse_tcp",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": null,
+    "type": "payload",
+    "author": [
+      "vinicius-batistella"
+    ],
+    "description": "Connect back to the attacker and spawn a Windows command shell on a\n          Windows on ARM (AArch64) target. Position-independent shellcode that\n          resolves API addresses via PEB / Export Address Table hashing\n          (Stephen Fewer ROR-13), opens a TCP socket through Winsock, calls\n          WSAConnect, then spawns cmd.exe with stdin/stdout/stderr piped over\n          the socket via CreateProcessA + STARTF_USESTDHANDLES. EXITFUNC is\n          honored via a runtime hash-dispatcher.",
+    "references": [],
+    "platform": "Windows",
+    "arch": "aarch64",
+    "rport": null,
+    "autofilter_ports": null,
+    "autofilter_services": null,
+    "targets": null,
+    "mod_time": "2026-07-24 00:11:10 +0000",
+    "path": "/modules/payloads/singles/windows/aarch64/shell_reverse_tcp.rb",
+    "is_install_path": true,
+    "ref_name": "windows/aarch64/shell_reverse_tcp",
+    "check": false,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {},
+    "session_types": false,
+    "needs_cleanup": false,
+    "payload_type": 1,
+    "staged": false
+  },
   "payload_windows/adduser": {
     "name": "Windows Execute net user /ADD",
     "fullname": "payload/windows/adduser",
