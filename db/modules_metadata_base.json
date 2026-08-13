@@ -6765,7 +6765,7 @@
     "autofilter_ports": [],
     "autofilter_services": [],
     "targets": null,
-    "mod_time": "2026-02-03 20:58:31 +0000",
+    "mod_time": "2026-08-07 09:34:29 +0000",
     "path": "/modules/auxiliary/admin/kerberos/forge_ticket.rb",
     "is_install_path": true,
     "ref_name": "admin/kerberos/forge_ticket",
@@ -87444,6 +87444,66 @@
     "session_types": false,
     "needs_cleanup": null
   },
+  "exploit_linux/http/sonicwall_sma1000_wsproxy_rce": {
+    "name": "SonicWall SMA1000 WorkPlace wsproxy SSRF Remote Command Execution",
+    "fullname": "exploit/linux/http/sonicwall_sma1000_wsproxy_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-07-14",
+    "type": "exploit",
+    "author": [
+      "Ryan Emmons",
+      "Deral Heiland",
+      "Rapid7 Vulnerability Research"
+    ],
+    "description": "This module exploits a Server-Side Request Forgery (SSRF)\n          vulnerability in the SonicWall SMA1000 WorkPlace wsproxy service to\n          access the internal Erlang distribution service.\n\n          After authenticating using the known Erlang distribution cookie, the\n          module invokes os:cmd/1 through Erlang RPC to execute arbitrary Unix\n          commands in the context of the vulnerable SMA service.\n\n          The check method performs a benign Erlang node RPC rather than\n          executing an operating system command.",
+    "references": [
+      "CVE-2026-15409",
+      "URL-https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0008",
+      "URL-https://www.rapid7.com/blog/post/etr-rapid7-mdr-team-discovers-new-sonicwall-sma1000-zero-days-being-actively-exploited-cve-2026-15409-cve-2026-15410/"
+    ],
+    "platform": "Linux,Unix",
+    "arch": "cmd",
+    "rport": 443,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Unix Command"
+    ],
+    "mod_time": "2026-07-29 15:13:38 +0000",
+    "path": "/modules/exploits/linux/http/sonicwall_sma1000_wsproxy_rce.rb",
+    "is_install_path": true,
+    "ref_name": "linux/http/sonicwall_sma1000_wsproxy_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
   "exploit_linux/http/sophos_utm_webadmin_sid_cmd_injection": {
     "name": "Sophos UTM WebAdmin SID Command Injection",
     "fullname": "exploit/linux/http/sophos_utm_webadmin_sid_cmd_injection",
@@ -111611,6 +111671,66 @@
     "session_types": false,
     "needs_cleanup": null
   },
+  "exploit_multi/http/ghostcms_auth_rce_cve_2026_29053": {
+    "name": "Ghost CMS Remote Code Execution",
+    "fullname": "exploit/multi/http/ghostcms_auth_rce_cve_2026_29053",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-03-02",
+    "type": "exploit",
+    "author": [
+      "Maksim Rogov",
+      "Cristian-Alexandru Staicu"
+    ],
+    "description": "This module exploits a Remote Code Execution (RCE) vulnerability in Ghost CMS.\n          Specifically crafted malicious themes can execute arbitrary code on the server running Ghost.\n\n          The affected versions include all releases from 0.7.2 up to and including 6.19.0.\n          For versions 5.105.0-5.130.5 and 6.0.0-6.10.3, the module also leverages a 2FA bypass.",
+    "references": [
+      "CVE-2026-29053",
+      "CVE-2026-22594",
+      "URL-https://www.endorlabs.com/learn/rce-in-ghost-cms-ghsa-cgc2-rcrh-qr5x"
+    ],
+    "platform": "Linux,Unix,Windows",
+    "arch": "cmd",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Ghost >= 0.7.2, <= 6.19.0 / Unix payload",
+      "Ghost >= 0.7.2, <= 6.19.0 / Windows payload"
+    ],
+    "mod_time": "2026-08-07 05:21:48 +0000",
+    "path": "/modules/exploits/multi/http/ghostcms_auth_rce_cve_2026_29053.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/ghostcms_auth_rce_cve_2026_29053",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
   "exploit_multi/http/gibbon_auth_rce_cve_2024_24725": {
     "name": "Gibbon School Platform Authenticated PHP Deserialization Vulnerability",
     "fullname": "exploit/multi/http/gibbon_auth_rce_cve_2024_24725",
@@ -114624,6 +114744,66 @@
     "path": "/modules/exploits/multi/http/langflow_unauth_rce_cve_2025_3248.rb",
     "is_install_path": true,
     "ref_name": "multi/http/langflow_unauth_rce_cve_2025_3248",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "artifacts-on-disk",
+        "ioc-in-logs"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
+  "exploit_multi/http/langflow_unauth_rce_cve_2026_33017": {
+    "name": "Langflow Unauth RCE",
+    "fullname": "exploit/multi/http/langflow_unauth_rce_cve_2026_33017",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-03-20",
+    "type": "exploit",
+    "author": [
+      "Richard Howe <rhowe425>",
+      "Diamorphine"
+    ],
+    "description": "Langflow versions prior to 1.9.0 are susceptible to unauthenticated remote code execution through the\n          /api/v1/build_public_tmp/<flow_id>/flow endpoint. A remote and unauthenticated attacker can send crafted\n          HTTP requests to execute arbitrary code.",
+    "references": [
+      "CVE-2026-33017",
+      "EDB-52627",
+      "URL-https://medium.com/@aviral23/cve-2026-33017-how-i-found-an-unauthenticated-rce-in-langflow-by-reading-the-code-they-already-dc96cdce5896"
+    ],
+    "platform": "Python",
+    "arch": "python",
+    "rport": 7860,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Python payload"
+    ],
+    "mod_time": "2026-08-11 12:13:20 +0000",
+    "path": "/modules/exploits/multi/http/langflow_unauth_rce_cve_2026_33017.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/langflow_unauth_rce_cve_2026_33017",
     "check": true,
     "post_auth": false,
     "default_credential": false,
@@ -126966,6 +127146,74 @@
     },
     "session_types": false,
     "needs_cleanup": null
+  },
+  "exploit_multi/http/wp_batch_desync_rce": {
+    "name": "WordPress WP2Shell REST API Batch Route Confusion SQLi to RCE",
+    "fullname": "exploit/multi/http/wp_batch_desync_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-07-17",
+    "type": "exploit",
+    "author": [
+      "Adam Kues",
+      "TF1T",
+      "dtro",
+      "haongo",
+      "Crypto-Cat"
+    ],
+    "description": "This module chains two WordPress core vulnerabilities, together known as\n          WP2Shell, to gain unauthenticated remote code execution against default\n          installs of WordPress 6.9.0-6.9.4 and 7.0.0-7.0.1.\n          The vulnerabilities are fixed in WordPress 6.9.5 and 7.0.2.\n\n          CVE-2026-60137 is an SQL injection in WP_Query's author__not_in parameter, and\n          CVE-2026-63030 is a REST API batch endpoint route-confusion bug that lets an\n          unauthenticated request reach that injection.\n\n          The module uses the injection to read the database table prefix and the\n          administrator user ID, poisons WordPress' object cache to publish a crafted\n          customizer changeset, and re-enters the REST API with administrator privileges\n          to create a new administrator account. It then logs in as that account, uploads\n          a plugin containing a Metasploit payload, and executes it for a session. Once a\n          session is obtained the uploaded plugin is removed, and the created administrator\n          account is removed as well unless KeepAdmin is set.",
+    "references": [
+      "CVE-2026-63030",
+      "CVE-2026-60137",
+      "URL-https://wordpress.org/news/2026/07/wordpress-7-0-2-release/",
+      "URL-https://slcyber.io/research-center/exploit-brokers-pay-500000-for-a-wordpress-rce-i-found-one-with-gpt5-6/",
+      "URL-https://github.com/Crypto-Cat/wp2shell",
+      "URL-https://wp2shell.com/"
+    ],
+    "platform": "Linux,PHP,Unix",
+    "arch": "php, cmd",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "PHP In-Memory",
+      "Unix/Linux Command Shell"
+    ],
+    "mod_time": "2026-08-06 12:35:36 +0000",
+    "path": "/modules/exploits/multi/http/wp_batch_desync_rce.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/wp_batch_desync_rce",
+    "check": true,
+    "post_auth": true,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs",
+        "artifacts-on-disk",
+        "config-changes"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": true
   },
   "exploit_multi/http/wp_bricks_builder_rce": {
     "name": "Unauthenticated RCE in Bricks Builder Theme",
@@ -300736,6 +300984,39 @@
     "payload_type": 1,
     "staged": false
   },
+  "payload_windows/aarch64/shell/reverse_tcp": {
+    "name": "Windows AArch64 Command Shell, Windows AArch64 Reverse TCP Stager",
+    "fullname": "payload/windows/aarch64/shell/reverse_tcp",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": null,
+    "type": "payload",
+    "author": [
+      "vinicius-batistella"
+    ],
+    "description": "Spawn a piped command shell on Windows on ARM (AArch64) (staged).\nExpects an open TCP socket handle in x0 at entry (convention sockx0).\nResolves CreateProcessA via PEB / Export Address Table hashing and\nlaunches cmd.exe with stdin/stdout/stderr redirected to the socket\nvia STARTF_USESTDHANDLES.\nConnect back to the attacker (Windows AArch64)",
+    "references": [],
+    "platform": "Windows",
+    "arch": "aarch64",
+    "rport": null,
+    "autofilter_ports": null,
+    "autofilter_services": null,
+    "targets": null,
+    "mod_time": "2026-08-11 15:26:00 +0000",
+    "path": "/modules/payloads/stagers/windows/aarch64/reverse_tcp.rb",
+    "is_install_path": true,
+    "ref_name": "windows/aarch64/shell/reverse_tcp",
+    "check": false,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {},
+    "session_types": false,
+    "needs_cleanup": false,
+    "payload_type": 2,
+    "staged": true,
+    "stage_refname": "windows/aarch64/shell",
+    "stager_refname": "windows/aarch64/reverse_tcp"
+  },
   "payload_windows/aarch64/shell_reverse_tcp": {
     "name": "Windows AArch64 Command Shell, Reverse TCP Inline",
     "fullname": "payload/windows/aarch64/shell_reverse_tcp",
@@ -300754,7 +301035,7 @@
     "autofilter_ports": null,
     "autofilter_services": null,
     "targets": null,
-    "mod_time": "2026-07-24 00:11:10 +0000",
+    "mod_time": "2026-08-11 01:21:05 +0000",
     "path": "/modules/payloads/singles/windows/aarch64/shell_reverse_tcp.rb",
     "is_install_path": true,
     "ref_name": "windows/aarch64/shell_reverse_tcp",
