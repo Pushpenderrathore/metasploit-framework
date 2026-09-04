@@ -51249,6 +51249,44 @@
     "needs_cleanup": false,
     "actions": []
   },
+  "auxiliary_scanner/msf/handler_detect": {
+    "name": "Metasploit Payload Handler Detection (TCP/UDP/HTTP/HTTPS)",
+    "fullname": "auxiliary/scanner/msf/handler_detect",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": null,
+    "type": "auxiliary",
+    "author": [
+      "h00die"
+    ],
+    "description": "Detect Metasploit exploit/multi/handler listeners and other reverse\n        payload handlers by fingerprinting their wire behavior. Several\n        techniques are combined:\n\n          * Staged reverse handlers \"talk first\": on connect they transmit the\n            stage with a 4-byte length prefix whose endianness identifies the\n            family\n            - little-endian (pack 'V') for Windows native (metsrv)\n            - big-endian (pack 'N') for Python/PHP/Java/Android\n            - Linux/OSX native stagers send the raw machine-code stage with\n              no length prefix, and unix staged shells send a tiny execve(\"/bin/sh\")\n              shellcode.\n          * Reverse command shells \"talk first\" with an \"echo <token>\" probe.\n            Echoing the token back marks the shell valid and can capture an\n            operator's AutoRunScript / follow-up commands.\n          * reverse_http(s) Meterpreter handlers answer any unknown URI with the\n            default \"It works!\" body and Server: Apache. HTTP servers\n            (web_delivery, fetch handlers, exploit module servers) return a\n            distinctive 404 page.\n          * reverse_tcp_ssl handlers stage over TLS; an SSL probe reads the\n            stage/echo through the handshake.\n          * reverse_udp handlers send the stage in response to any datagram, so\n            an optional UDP probe (SCAN_UDP) catches them too.\n\n        Transports that are not TCP/UDP (reverse_sctp, reverse_named_pipe/SMB)\n        and silent stageless payloads that wait for the client cannot be\n        fingerprinted and appear as a silent open port.",
+    "references": [],
+    "platform": "",
+    "arch": "",
+    "rport": null,
+    "autofilter_ports": [],
+    "autofilter_services": [],
+    "targets": null,
+    "mod_time": "2026-08-31 12:42:42 +0000",
+    "path": "/modules/auxiliary/scanner/msf/handler_detect.rb",
+    "is_install_path": true,
+    "ref_name": "scanner/msf/handler_detect",
+    "check": false,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ],
+      "Reliability": []
+    },
+    "session_types": false,
+    "needs_cleanup": false,
+    "actions": []
+  },
   "auxiliary_scanner/msf/msf_rpc_login": {
     "name": "Metasploit RPC Interface Login Utility",
     "fullname": "auxiliary/scanner/msf/msf_rpc_login",
@@ -67733,6 +67771,37 @@
     "path": "/modules/evasion/linux/x64/rc4_packer.rb",
     "is_install_path": true,
     "ref_name": "linux/x64/rc4_packer",
+    "check": false,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {},
+    "session_types": false,
+    "needs_cleanup": false
+  },
+  "evasion_linux/x64/sandbox_gate": {
+    "name": "Linux x64 Sandbox Environment Gate",
+    "fullname": "evasion/linux/x64/sandbox_gate",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": null,
+    "type": "evasion",
+    "author": [
+      "Massimo Bertocchi"
+    ],
+    "description": "Generates a Linux x64 ELF whose entry point is a pre-execution\n          environment gate designed to detect and evade automated malware\n          analysis sandboxes, hypervisors and containerized environments.",
+    "references": [],
+    "platform": "Linux",
+    "arch": "x64",
+    "rport": null,
+    "autofilter_ports": null,
+    "autofilter_services": null,
+    "targets": [
+      "Linux x64"
+    ],
+    "mod_time": "2026-08-27 23:04:40 +0000",
+    "path": "/modules/evasion/linux/x64/sandbox_gate.rb",
+    "is_install_path": true,
+    "ref_name": "linux/x64/sandbox_gate",
     "check": false,
     "post_auth": false,
     "default_credential": false,
@@ -110547,7 +110616,7 @@
       "Windows",
       "Linux"
     ],
-    "mod_time": "2026-04-22 11:57:58 +0000",
+    "mod_time": "2026-08-29 17:12:33 +0000",
     "path": "/modules/exploits/multi/http/coldfusion_rds_auth_bypass.rb",
     "is_install_path": true,
     "ref_name": "multi/http/coldfusion_rds_auth_bypass",
@@ -116925,6 +116994,65 @@
     "session_types": false,
     "needs_cleanup": true
   },
+  "exploit_multi/http/mcpjam_inspector_rce": {
+    "name": "MCPJam Inspector Connect API Command Execution",
+    "fullname": "exploit/multi/http/mcpjam_inspector_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-01-16",
+    "type": "exploit",
+    "author": [
+      "Louay-075",
+      "earthenvessel"
+    ],
+    "description": "This module exploits an unauthenticated command execution vulnerability in\n          MCPJam Inspector. The /api/mcp/connect endpoint accepts a JSON serverConfig\n          object containing a command and argument list used to start an MCP server.\n          A remote attacker can abuse this endpoint to execute arbitrary operating\n          system commands as the user running MCPJam Inspector.\n\n          By default, this module starts a transient Node.js stdio MCP server, then\n          invokes a tool that executes the Metasploit command payload. A direct\n          /bin/sh -c mode is also available via EXEC_METHOD=direct_sh, but the MCP\n          tool mode is more reliable when the inspector expects a valid MCP\n          handshake.",
+    "references": [
+      "CVE-2026-23744",
+      "URL-https://github.com/mcpjam/inspector",
+      "URL-https://packetinside.github.io/cves/cve-2026-23744/"
+    ],
+    "platform": "Linux,Unix",
+    "arch": "cmd",
+    "rport": 443,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Unix/Linux Command"
+    ],
+    "mod_time": "2026-08-31 15:14:30 +0000",
+    "path": "/modules/exploits/multi/http/mcpjam_inspector_rce.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/mcpjam_inspector_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
   "exploit_multi/http/mediawiki_syntaxhighlight": {
     "name": "MediaWiki SyntaxHighlight extension option injection vulnerability",
     "fullname": "exploit/multi/http/mediawiki_syntaxhighlight",
@@ -119844,6 +119972,69 @@
     "session_types": false,
     "needs_cleanup": null
   },
+  "exploit_multi/http/papercut_ng_external_user_lookup_rce": {
+    "name": "PaperCut NG/MF Unauthenticated RCE (CVE-2026-81578 + CVE-2026-82078)",
+    "fullname": "exploit/multi/http/papercut_ng_external_user_lookup_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-08-27",
+    "type": "exploit",
+    "author": [
+      "sfewer-r7"
+    ],
+    "description": "This module exploits an authentication bypass in PaperCut NG and MF. A crafted Apache Tapestry\n          complex-direct request invokes privileged ConfigEditor components through the public Home\n          page. On version 26, the module reconfigures external user lookup to use an H2 JDBC URL whose\n          initialization SQL evaluates Groovy code. On versions 24 and 25, it uses a bundled Derby\n          procedure to write a temporary Groovy bootstrap class to the application classpath, then loads\n          it as a database driver. The Java target serves an executable payload JAR and a generic\n          memory-backed JAR loader over HTTP. Its payload classes and resources remain in memory; however,\n          versions 24 and 25 still require the temporary Derby bootstrap class. The command targets execute\n          a Windows or Linux command payload directly.\n\n          This module was successfully tested against:\n          * PaperCut MF 26.0.4 (Build 76494) <-- emergency patch v1\n          * PaperCut NG 26.0.4 (Build 76495) <-- emergency patch v1\n          * PaperCut NG 26.0.3 (Build 76225)\n          * PaperCut NG 25.0.11 (Build 75758)\n          * PaperCut NG 24.1.9 (Build 73376)",
+    "references": [
+      "CVE-2026-81578",
+      "CVE-2026-82078",
+      "URL-https://www.rapid7.com/blog/post/etr-papercut-ng-mf-critical-zero-day-exploited-in-the-wild/",
+      "URL-https://www.papercut.com/kb/Main/security-bulletin-27-aug-2026-urgent-security-advisory/"
+    ],
+    "platform": "Java,Linux,Unix,Windows",
+    "arch": "java, cmd",
+    "rport": 9191,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Java",
+      "Windows Command",
+      "Linux Command"
+    ],
+    "mod_time": "2026-09-02 10:28:21 +0000",
+    "path": "/modules/exploits/multi/http/papercut_ng_external_user_lookup_rce.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/papercut_ng_external_user_lookup_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs",
+        "artifacts-on-disk",
+        "config-changes"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
   "exploit_multi/http/pentaho_business_server_authbypass_and_ssti": {
     "name": "Pentaho Business Server Auth Bypass and Server Side Template Injection RCE",
     "fullname": "exploit/multi/http/pentaho_business_server_authbypass_and_ssti",
@@ -122748,6 +122939,71 @@
       ],
       "SideEffects": [
         "unknown-side-effects"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
+  "exploit_multi/http/simplehelp_oidc_auth_bypass_rce": {
+    "name": "SimpleHelp OIDC Authentication Bypass Remote Code Execution",
+    "fullname": "exploit/multi/http/simplehelp_oidc_auth_bypass_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-06-12",
+    "type": "exploit",
+    "author": [
+      "Zach Hanley",
+      "Horizon3.ai",
+      "Blackpoint Cyber",
+      "jheysel-r7"
+    ],
+    "description": "This module exploits CVE-2026-48558 to forge an OpenID Connect identity token and\n          obtain a SimpleHelp technician session. It then uses SimpleHelp's legitimate remote\n          access WebSocket protocol to connect to an online managed machine and execute a\n          payload through the remote terminal.\n\n          An OIDC provider must be enabled for a technician group that permits group-authenticated\n          logins. The group must be allowed to access the selected machine and run remote commands.\n          The SimpleHelp server must have a valid session license, and at least one managed machine\n          must be online.\n\n          SimpleHelp 5.5.0 through 5.5.15 are affected. Some SimpleHelp 6.0 prerelease builds before\n          6.0 RC2 are also affected.",
+    "references": [
+      "CVE-2026-48558",
+      "URL-https://horizon3.ai/attack-research/disclosures/cve-2026-48558-simplehelp-authentication-bypass-iocs/",
+      "URL-https://guides.simple-help.com/kb---security-vulnerabilities-05-2026",
+      "URL-https://blackpointcyber.com/blog/a-djinn-in-the-machine-taskweavers-node-js-intrusion-chain/"
+    ],
+    "platform": "Linux,OSX,Unix,Windows",
+    "arch": "cmd",
+    "rport": 443,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Unix/Linux/macOS Command",
+      "Windows Command"
+    ],
+    "mod_time": "2026-09-01 14:06:12 +0000",
+    "path": "/modules/exploits/multi/http/simplehelp_oidc_auth_bypass_rce.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/simplehelp_oidc_auth_bypass_rce",
+    "check": true,
+    "post_auth": true,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs",
+        "config-changes",
+        "artifacts-on-disk"
       ]
     },
     "session_types": false,
@@ -212895,7 +213151,7 @@
       "MOF upload",
       "Command"
     ],
-    "mod_time": "2026-08-17 18:01:09 +0000",
+    "mod_time": "2026-08-31 23:54:17 +0000",
     "path": "/modules/exploits/windows/smb/psexec.rb",
     "is_install_path": true,
     "ref_name": "windows/smb/psexec",
