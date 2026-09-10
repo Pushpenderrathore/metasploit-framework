@@ -36318,6 +36318,65 @@
       }
     ]
   },
+  "auxiliary_scanner/http/elasticsearch_tika_xfa_xxe": {
+    "name": "Elasticsearch ingest-attachment Apache Tika XFA XXE Local File Read",
+    "fullname": "auxiliary/scanner/http/elasticsearch_tika_xfa_xxe",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": "2025-08-20",
+    "type": "auxiliary",
+    "author": [
+      "Jean-Marie Bourbon",
+      "Bourbon Offensive Security Services"
+    ],
+    "description": "This module validates CVE-2025-54988 / CVE-2025-66516 through an\n          Elasticsearch ingest pipeline using the attachment processor. It creates\n          a temporary pipeline, submits an in-memory PDF containing crafted XFA data\n          to the _simulate API, extracts a caller-selected local file, and removes\n          the pipeline in an ensure block.\n\n          The target must permit pipeline creation, simulation, and deletion. The\n          default proof file is /etc/hostname. No index or document is created.",
+    "references": [
+      "CVE-2025-54988",
+      "CVE-2025-66516",
+      "URL-https://discuss.elastic.co/t/381427"
+    ],
+    "platform": "",
+    "arch": "",
+    "rport": 9200,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": null,
+    "mod_time": "2026-09-08 21:22:11 +0000",
+    "path": "/modules/auxiliary/scanner/http/elasticsearch_tika_xfa_xxe.rb",
+    "is_install_path": true,
+    "ref_name": "scanner/http/elasticsearch_tika_xfa_xxe",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs",
+        "config-changes"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": false,
+    "actions": []
+  },
   "auxiliary_scanner/http/elasticsearch_traversal": {
     "name": "ElasticSearch Snapshot API Directory Traversal",
     "fullname": "auxiliary/scanner/http/elasticsearch_traversal",
@@ -44546,6 +44605,62 @@
       "Stability": [],
       "Reliability": [],
       "SideEffects": []
+    },
+    "session_types": false,
+    "needs_cleanup": false,
+    "actions": []
+  },
+  "auxiliary_scanner/http/spip_annee_sqli": {
+    "name": "SPIP Unauthenticated Blind SQLi via Date Field Escaping Bypass",
+    "fullname": "auxiliary/scanner/http/spip_annee_sqli",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": "2026-08-10",
+    "type": "auxiliary",
+    "author": [
+      "Benoit Hua",
+      "ka3n1x",
+      "Franck Chevalier",
+      "Julien Voisin"
+    ],
+    "description": "This module exploits an unauthenticated blind SQL injection in\n          SPIP < 4.4.18. The SQL quoting function for date-type columns\n          skips escaping when the value matches /^\\w+\\(/ (intended for\n          NOW()). By passing a value like abs(X)) UNION SELECT ... in the\n          annee parameter of the public sitemap.xml page, an attacker can\n          inject arbitrary SQL.\n\n          The module uses boolean-based blind injection to extract bcrypt\n          password hashes from spip_auteurs. A UNION SELECT with a WHERE\n          condition produces 2 URLs in the sitemap on TRUE vs 1 on FALSE.",
+    "references": [
+      "URL-https://blog.spip.net/Mise-a-jour-critique-de-securite-sortie-de-SPIP-4-4-18.html"
+    ],
+    "platform": "",
+    "arch": "",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": null,
+    "mod_time": "2026-08-25 16:11:18 +0000",
+    "path": "/modules/auxiliary/scanner/http/spip_annee_sqli.rb",
+    "is_install_path": true,
+    "ref_name": "scanner/http/spip_annee_sqli",
+    "check": false,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ],
+      "Reliability": []
     },
     "session_types": false,
     "needs_cleanup": false,
@@ -63650,6 +63765,66 @@
       }
     ]
   },
+  "auxiliary_server/relay/esc8_kerberos": {
+    "name": "ESC8 Relay: SMB to HTTP(S) via Kerberos",
+    "fullname": "auxiliary/server/relay/esc8_kerberos",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": null,
+    "type": "auxiliary",
+    "author": [
+      "Pushpender Rathore"
+    ],
+    "description": "This module creates an SMB server and relays the Kerberos AP-REQ passed to it\n        (for example from a coerced host, CVE-2026-20929) to an AD CS Web Enrollment\n        HTTP endpoint to gain an authenticated connection. Once that connection is\n        established, the module makes an authenticated request for a certificate based\n        on a given template.\n\n        Unlike NTLM, a Kerberos AP-REQ is a complete, self-contained credential bound\n        to the SPN the victim was coerced into requesting, so there is no\n        challenge/response and the relay is a single request. The captured AP-REQ can\n        only be relayed to the service matching that SPN.",
+    "references": [
+      "CVE-2026-20929",
+      "ATT&CK-T1557",
+      "ATT&CK-T1649"
+    ],
+    "platform": "",
+    "arch": "",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": null,
+    "mod_time": "2026-09-04 19:03:24 +0000",
+    "path": "/modules/auxiliary/server/relay/esc8_kerberos.rb",
+    "is_install_path": true,
+    "ref_name": "server/relay/esc8_kerberos",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ],
+      "Reliability": []
+    },
+    "session_types": false,
+    "needs_cleanup": false,
+    "actions": [
+      {
+        "name": "Relay",
+        "description": "Run SMB ESC8 Kerberos relay server"
+      }
+    ]
+  },
   "auxiliary_server/relay/http_to_ldap": {
     "name": "Microsoft Windows HTTP to LDAP Relay",
     "fullname": "auxiliary/server/relay/http_to_ldap",
@@ -73525,6 +73700,69 @@
     },
     "session_types": false,
     "needs_cleanup": null
+  },
+  "exploit_linux/http/cisco_fmc_auth_bypass_rce": {
+    "name": "Cisco Secure Firewall Management Center Authentication Bypass RCE",
+    "fullname": "exploit/linux/http/cisco_fmc_auth_bypass_rce",
+    "aliases": [],
+    "rank": 300,
+    "disclosure_date": "2026-03-04",
+    "type": "exploit",
+    "author": [
+      "Brandon Sakai",
+      "Cale Black",
+      "Arian Eidizadeh"
+    ],
+    "description": "This module exploits CVE-2026-20079, an authentication bypass in the\n          web interface of Cisco Secure Firewall Management Center (FMC). It\n          upgrades a boot-created machine session, obtains its session-specific\n          action token, writes a Makeself-compatible shell script, and executes\n          the selected command payload as root.\n\n          Exploitation requires the transient csm_processes startup session to\n          still exist. Normal authenticated activity or session cleanup may\n          remove that session, so an affected appliance may not be exploitable\n          at the time of testing. The underlying request sequence and\n          FIFO/netcat payload were tested against Cisco Secure FMC 10.0.1-1.",
+    "references": [
+      "CVE-2026-20079",
+      "URL-https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-onprem-fmc-authbypass-5JPp45V2",
+      "URL-https://www.vulncheck.com/blog/cisco-fmc-auth-bypass-cve-2026-20079",
+      "URL-https://github.com/CyberAuth/CVE-2026-20079",
+      "URL-https://banks.tools/writeups/cve-2026-20079-cisco-secure-fmc"
+    ],
+    "platform": "Linux,Unix",
+    "arch": "cmd",
+    "rport": 443,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Unix/Linux Command"
+    ],
+    "mod_time": "2026-09-08 12:58:07 +0000",
+    "path": "/modules/exploits/linux/http/cisco_fmc_auth_bypass_rce.rb",
+    "is_install_path": true,
+    "ref_name": "linux/http/cisco_fmc_auth_bypass_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "unreliable-session"
+      ],
+      "SideEffects": [
+        "artifacts-on-disk",
+        "ioc-in-logs"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": true
   },
   "exploit_linux/http/cisco_hyperflex_file_upload_rce": {
     "name": "Cisco HyperFlex HX Data Platform unauthenticated file upload to RCE (CVE-2021-1499)",
@@ -87956,6 +88194,71 @@
       "SideEffects": [
         "ioc-in-logs",
         "artifacts-on-disk"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
+  "exploit_linux/http/sonicwall_sma1000_couchdb_rce": {
+    "name": "SonicWall SMA1000 WorkPlace SSRF to Root Remote Code Execution",
+    "fullname": "exploit/linux/http/sonicwall_sma1000_couchdb_rce",
+    "aliases": [],
+    "rank": 500,
+    "disclosure_date": "2026-09-01",
+    "type": "exploit",
+    "author": [
+      "sfewer-r7",
+      "William Perry",
+      "Adam Babis"
+    ],
+    "description": "This module chains three issues in SonicWall SMA1000 appliances. An\n          unauthenticated, absolute-form OPTIONS request makes the WorkPlace\n          listener act as an unintended forward proxy (CVE-2026-83548). The\n          module uses this access and a vendor-installed CouchDB update handler\n          to obtain read and write access to loopback CouchDB (SMA1000-9427),\n          then enables CouchDB's native Erlang query server and executes one\n          command as the couchdb service account.\n\n          That command derives the appliance-local ctrl-service credential and\n          invokes sysCtrl.execCmsSnmpTrap. A command injection in the SNMP trap\n          script (CVE-2026-83549) executes the selected command as root.\n\n          The module attempts to restore the original CouchDB logger\n          configuration, remove its injected INI data, disable the Erlang query\n          server, and delete its randomized CouchDB documents. SonicWall fixed\n          the issues in platform hotfixes 12.4.3-03526 and 12.5.0-02952.",
+    "references": [
+      "CVE-2026-83548",
+      "CVE-2026-83549",
+      "URL-https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0016",
+      "URL-https://www.sonicwall.com/support/notices/product-notice-sma-1000-series-affected-by-multiple-vulnerabilities-snwlid-2026-0016/kA1VN000002AXmQ0AW",
+      "URL-https://software.sonicwall.com/PFORMSMAHOTFIX/Documentation/TechNotepform-hotfix-12.5.0-02952.txt",
+      "URL-https://www.rapid7.com/blog/post/etr-critical-sonicwall-sma1000-vulnerabilities-cve-2026-83548-cve-2026-83549-exploited-in-the-wild/"
+    ],
+    "platform": "Linux,Unix",
+    "arch": "cmd",
+    "rport": 443,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Linux Command"
+    ],
+    "mod_time": "2026-09-09 15:07:31 +0000",
+    "path": "/modules/exploits/linux/http/sonicwall_sma1000_couchdb_rce.rb",
+    "is_install_path": true,
+    "ref_name": "linux/http/sonicwall_sma1000_couchdb_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-service-restarts"
+      ],
+      "SideEffects": [
+        "artifacts-on-disk",
+        "config-changes",
+        "ioc-in-logs"
+      ],
+      "Reliability": [
+        "repeatable-session"
       ]
     },
     "session_types": false,
@@ -115462,6 +115765,64 @@
     "session_types": false,
     "needs_cleanup": true
   },
+  "exploit_multi/http/langflow_auth_rce_cve_2026_19295": {
+    "name": "Langflow AI authenticated RCE",
+    "fullname": "exploit/multi/http/langflow_auth_rce_cve_2026_19295",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-08-28",
+    "type": "exploit",
+    "author": [
+      "Richard Howe <rhowe425>"
+    ],
+    "description": "Langflow versions 1.11.1 and below are susceptible to authenticated\n          remote code execution. By saving a flow where `data.type` is empty,\n          an authenticated user can bypass the flow guard and execute\n          arbitrary Python code.",
+    "references": [
+      "CVE-2026-19295",
+      "URL-https://www.ibm.com/support/pages/node/7284733"
+    ],
+    "platform": "Python",
+    "arch": "python",
+    "rport": 7860,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Python payload"
+    ],
+    "mod_time": "2026-09-08 16:02:58 +0000",
+    "path": "/modules/exploits/multi/http/langflow_auth_rce_cve_2026_19295.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/langflow_auth_rce_cve_2026_19295",
+    "check": true,
+    "post_auth": true,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "artifacts-on-disk",
+        "ioc-in-logs"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
   "exploit_multi/http/langflow_rce_cve_2026_27966": {
     "name": "Langflow RCE",
     "fullname": "exploit/multi/http/langflow_rce_cve_2026_27966",
@@ -123565,6 +123926,62 @@
       ],
       "SideEffects": [
         "artifacts-on-disk"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
+  "exploit_multi/http/spip_autosave_rce": {
+    "name": "SPIP Autosave Session Unauthenticated RCE",
+    "fullname": "exploit/multi/http/spip_autosave_rce",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-08-30",
+    "type": "exploit",
+    "author": [
+      "Julien Voisin"
+    ],
+    "description": "This module exploits an unauthenticated RCE in SPIP <= 4.4.21\n          via the forum autosave session handler. The action=session\n          endpoint allows any visitor to store arbitrary data in a PHP\n          session variable. By writing PHP code into an autosave_forum_*\n          session key, the code is executed by the template engine when\n          the forum form page is rendered with the poisoned session.\n\n          Requires a published article with public forums enabled.",
+    "references": [
+      "URL-https://blog.spip.net/Mise-a-jour-critique-de-securite-sortie-de-SPIP-4-4-22.html"
+    ],
+    "platform": "Linux,Unix",
+    "arch": "cmd",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Unix/Linux Command Shell"
+    ],
+    "mod_time": "2026-08-31 14:13:32 +0000",
+    "path": "/modules/exploits/multi/http/spip_autosave_rce.rb",
+    "is_install_path": true,
+    "ref_name": "multi/http/spip_autosave_rce",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "Reliability": [
+        "repeatable-session"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
       ]
     },
     "session_types": false,
@@ -139459,9 +139876,10 @@
     "autofilter_ports": [],
     "autofilter_services": [],
     "targets": [
-      "Linux/Unix Command"
+      "Linux/Unix Command",
+      "Backdoor Command Shell"
     ],
-    "mod_time": "2026-04-22 11:59:31 +0000",
+    "mod_time": "2026-09-02 06:58:16 +0000",
     "path": "/modules/exploits/unix/ftp/vsftpd_234_backdoor.rb",
     "is_install_path": true,
     "ref_name": "unix/ftp/vsftpd_234_backdoor",
@@ -187854,6 +188272,67 @@
       "SideEffects": [
         "ioc-in-logs",
         "artifacts-on-disk"
+      ]
+    },
+    "session_types": false,
+    "needs_cleanup": null
+  },
+  "exploit_windows/http/nextjs_unauth_rce_cve_2026_75604": {
+    "name": "Next.js Unauthenticated RCE on Windows Servers",
+    "fullname": "exploit/windows/http/nextjs_unauth_rce_cve_2026_75604",
+    "aliases": [],
+    "rank": 600,
+    "disclosure_date": "2026-08-26",
+    "type": "exploit",
+    "author": [
+      "Maksim Rogov",
+      "Bogyeom Lee",
+      "Avishek Sarkar"
+    ],
+    "description": "This module exploits a Remote Code Execution (RCE) vulnerability in Next.js applications\n          hosted on Windows servers. Specifically crafted requests can execute arbitrary code on the target server.\n\n          The affected versions include releases from 13.4.0 up to 15.5.24, and 16.0.0 up to 16.3.3,\n          utilizing both Pages and App Routers without Cache Components.",
+    "references": [
+      "CVE-2026-75604",
+      "URL-https://nextjs.org/blog/august-2026-security-release",
+      "URL-https://github.com/vercel/next.js/security/advisories/GHSA-p293-qw3h-jr36",
+      "URL-https://sybr1d.xyz/posts/nextjs-path-traversal-rce-windows/"
+    ],
+    "platform": "Windows",
+    "arch": "cmd",
+    "rport": 80,
+    "autofilter_ports": [
+      80,
+      8080,
+      443,
+      8000,
+      8888,
+      8880,
+      8008,
+      3000,
+      8443
+    ],
+    "autofilter_services": [
+      "http",
+      "https"
+    ],
+    "targets": [
+      "Next.js >=13.4 <15.5.24, >=16.0 <16.3.3 / Windows payload"
+    ],
+    "mod_time": "2026-09-09 09:33:06 +0000",
+    "path": "/modules/exploits/windows/http/nextjs_unauth_rce_cve_2026_75604.rb",
+    "is_install_path": true,
+    "ref_name": "windows/http/nextjs_unauth_rce_cve_2026_75604",
+    "check": true,
+    "post_auth": false,
+    "default_credential": false,
+    "notes": {
+      "Stability": [
+        "crash-safe"
+      ],
+      "SideEffects": [
+        "ioc-in-logs"
+      ],
+      "Reliability": [
+        "unreliable-session"
       ]
     },
     "session_types": false,
